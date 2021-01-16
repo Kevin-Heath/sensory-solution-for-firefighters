@@ -93,8 +93,8 @@ async def run(loop):
                     print(response.json())
                     response = response.json()
 
-                    if(response['hasPerson']):
-
+                    if(response['hasPerson'] == True):
+                        print("has person")
                         if(response['direction']):
 
                             print(response['direction'])
@@ -113,7 +113,8 @@ async def run(loop):
 
                             else:
                                 print("inconclusive")
-                    
+                    else:
+                        print("no person")
                         
                     #end_request=time.time()
                     #print("total request time: " + str(end_request - start_request))
