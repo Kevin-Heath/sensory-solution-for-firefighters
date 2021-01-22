@@ -51,7 +51,6 @@ async def run(loop):
         mlx = adafruit_mlx90640.MLX90640(i2c) # begin MLX90640 with I2C comm
         mlx.refresh_rate = adafruit_mlx90640.RefreshRate.REFRESH_2_HZ # set refresh rate
 
-        #frame = np.zeros((24*32,)) # setup array for storing all 768 temperatures
         frame = [0]*768 # setup array for storing all 768 temperatures
 
         try:
@@ -68,14 +67,14 @@ async def run(loop):
                     ax.set_axis_off()
                     fig.add_axes(ax)
                     
-                    therm1 = ax.imshow(np.zeros(mlx_shape), aspect='auto')
+                    thermal_image = ax.imshow(np.zeros(mlx_shape), aspect='auto')
                     
                     MIN= 18.67
                     MAX= 43.68
                     
                     data_array = (np.reshape(frame,mlx_shape)) # reshape to 24x32
-                    therm1.set_data(np.fliplr(data_array)) # flip left to right
-                    therm1.set_clim(vmin=MIN,vmax=MAX) # set bounds
+                    thermal_image.set_data(np.fliplr(data_array)) # flip left to right
+                    thermal_image.set_clim(vmin=MIN,vmax=MAX) # set bounds
                     
                     
                     #print("img as fig " +str(time.time() - start), end='')
@@ -99,7 +98,7 @@ async def run(loop):
 
                             print(response['direction'])
 
-                            if response['direction'] == 1:
+                            if response['direction'] == 3:
                                 await my_buzz.vibrate_motors(sweep_left)
                                 print("Left")
 
@@ -107,7 +106,7 @@ async def run(loop):
                                 await my_buzz.vibrate_motors(sweep_centre)
                                 print("Centre")
 
-                            elif response['direction'] == 3:
+                            elif response['direction'] == 1:
                                 await my_buzz.vibrate_motors(sweep_right)
                                 print("Right")
 
